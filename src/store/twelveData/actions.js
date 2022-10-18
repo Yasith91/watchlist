@@ -5,7 +5,7 @@ export const getTwelveData = symbol => (dispatch, getState) => {
     types: [types.LOAD_DATA, types.LOAD_DATA_SUCCESS, types.LOAD_DATA_FAIL],
     payload: {
       request: {
-        url: `/time_series?apikey=9a9ba629df204491913bcf9069077593&interval=5min&symbol=${symbol}`,
+        url: `/time_series?apikey=9a9ba629df204491913bcf9069077593&interval=1min&symbol=${symbol}`,
         method: 'get',
       },
     },
