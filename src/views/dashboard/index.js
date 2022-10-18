@@ -15,6 +15,7 @@ import {
   getTwelveData,
   setNewData,
   removeData,
+  setDataList,
 } from '../../store/twelveData/actions';
 import styles from './dashboard.styles';
 
@@ -27,16 +28,22 @@ let apiCall = {
 
 export default function MyApp() {
   const dispatch = useDispatch();
-  const { data } = useSelector(state => state.twelveData);
+  const { data: twelveData } = useSelector(state => state.twelveData);
   const [symbol, setSymbol] = useState('');
   const [refreshSocket, setRefreshSocket] = useState(false);
+  const [data, setData] = useState({});
+
+  useEffect(() => {
+    setData(twelveData);
+  }, [twelveData]);
 
   useEffect(() => {
     const addedSymbols = Object.keys(data).toString();
     if (addedSymbols) {
       apiCall.params.symbols = addedSymbols;
     }
-  }, [data]);
+    dispatch(setDataList(data));
+  }, [data, dispatch]);
 
   useEffect(() => {
     let ws = new WebSocket(
@@ -86,6 +93,25 @@ export default function MyApp() {
     dispatch(removeData(refreshSymbol));
   };
 
+  const sortByName = () => {
+    sort('symbol');
+  };
+
+  const sortByPrice = () => {
+    sort('price');
+  };
+
+  const sort = key => {
+    const sortable = Object.entries({ ...data })
+      .sort(([, a], [, b]) => {
+        return a[0][key] - b[0][key];
+      })
+      .reduce((r, [k, v]) => {
+        return { ...r, [k]: v };
+      }, {});
+    setData(sortable);
+  };
+
   return (
     <View style={styles.mainContainer}>
       <TextInput
@@ -95,6 +121,18 @@ export default function MyApp() {
         placeholder="Type relevant symbol"
       />
       <Button style={styles.btn} title="Add Symbol" onPress={onAddSymbol} />
+      <View style={styles.sorting}>
+        <TouchableHighlight style={styles.refresh} onPress={sortByName}>
+          <View>
+            <Text style={styles.sort}>Sortby Name</Text>
+          </View>
+        </TouchableHighlight>
+        <TouchableHighlight style={styles.refresh} onPress={sortByPrice}>
+          <View>
+            <Text style={styles.sort}>Sortby Price</Text>
+          </View>
+        </TouchableHighlight>
+      </View>
       <View>
         <SafeAreaView style={styles.container}>
           <ScrollView style={styles.scrollView}>

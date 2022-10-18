@@ -39,7 +39,7 @@ const styles = StyleSheet.create({
     right: 0,
     textAlign: 'right',
   },
-  removeBtn:{
+  removeBtn: {
     color: 'red',
     right: 0,
     textAlign: 'right',
@@ -64,6 +64,17 @@ const styles = StyleSheet.create({
   },
   text: {
     fontSize: 42,
+  },
+  sorting: {
+    marginTop: 10,
+    flexDirection: 'row',
+    alignItems: 'flex-start',
+    alignContent: 'flex-end',
+    justifyContent: 'flex-end',
+  },
+  sort: {
+    color: 'white',
+    marginRight: 15,
   },
 });
 

@@ -23,6 +23,9 @@ export default (state = initialState, action) => {
       const currentDataSet2 = { ...state.data };
       delete currentDataSet2[key];
       return { ...state, data: currentDataSet2 };
+    case types.SET_DATA_LIST:
+      const newObjList = action.payload;
+      return { ...state, data: newObjList };
     default:
       return state;
   }

@@ -21,3 +21,8 @@ export const removeData = data => ({
   type: types.REMOVE_DATA,
   payload: data,
 });
+
+export const setDataList = data => ({
+  type: types.SET_DATA_LIST,
+  payload: data,
+});
