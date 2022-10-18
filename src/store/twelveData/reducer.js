@@ -18,6 +18,11 @@ export default (state = initialState, action) => {
       const currentDataSet = { ...state.data };
       currentDataSet[newData.symbol] = [newData];
       return { ...state, data: currentDataSet };
+    case types.REMOVE_DATA:
+      const key = action.payload;
+      const currentDataSet2 = { ...state.data };
+      delete currentDataSet2[key];
+      return { ...state, data: currentDataSet2 };
     default:
       return state;
   }

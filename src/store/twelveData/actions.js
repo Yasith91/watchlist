@@ -16,3 +16,8 @@ export const setNewData = data => ({
   type: types.SET_DATA,
   payload: data,
 });
+
+export const removeData = data => ({
+  type: types.REMOVE_DATA,
+  payload: data,
+});

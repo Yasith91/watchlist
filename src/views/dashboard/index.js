@@ -11,7 +11,11 @@ import React, { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import moment from 'moment';
 
-import { getTwelveData, setNewData } from '../../store/twelveData/actions';
+import {
+  getTwelveData,
+  setNewData,
+  removeData,
+} from '../../store/twelveData/actions';
 import styles from './dashboard.styles';
 
 let apiCall = {
@@ -25,6 +29,7 @@ export default function MyApp() {
   const dispatch = useDispatch();
   const { data } = useSelector(state => state.twelveData);
   const [symbol, setSymbol] = useState('');
+  const [refreshSocket, setRefreshSocket] = useState(false);
 
   useEffect(() => {
     const addedSymbols = Object.keys(data).toString();
@@ -34,7 +39,7 @@ export default function MyApp() {
   }, [data]);
 
   useEffect(() => {
-    var ws = new WebSocket(
+    let ws = new WebSocket(
       'wss://ws.twelvedata.com/v1/quotes/price?apikey=9a9ba629df204491913bcf9069077593',
     );
     ws.onopen = () => {
@@ -61,17 +66,24 @@ export default function MyApp() {
       // connection closed
       console.log('close', e, e.reason);
     };
-  }, [dispatch]);
+    setRefreshSocket(false);
+  }, [dispatch, refreshSocket]);
 
   const onAddSymbol = () => {
     if (symbol) {
       dispatch(getTwelveData(symbol));
+      setRefreshSocket(true);
     }
   };
 
   const refreshData = refreshSymbol => {
     setSymbol(refreshSymbol);
     onAddSymbol();
+  };
+
+  const removeDataClick = refreshSymbol => {
+    setRefreshSocket(true);
+    dispatch(removeData(refreshSymbol));
   };
 
   return (
@@ -112,6 +124,15 @@ export default function MyApp() {
                           <Text style={styles.refreshBtn}>Refresh</Text>
                         </View>
                       </TouchableHighlight>
+                      <TouchableHighlight
+                        style={styles.refresh}
+                        onPress={() => removeDataClick(values[0])}>
+                        <View>
+                          {/* Icon goes here and then remove Text */}
+                          {/* <Icon /> */}
+                          <Text style={styles.removeBtn}>Remove</Text>
+                        </View>
+                      </TouchableHighlight>
                     </View>
                   </View>
                 );
@@ -124,4 +145,3 @@ export default function MyApp() {
     </View>
   );
 }
-

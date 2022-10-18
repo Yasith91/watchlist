@@ -22,7 +22,6 @@ const styles = StyleSheet.create({
   },
   title: {
     color: 'white',
-    // fontStyle: 'bold',
     fontSize: 15,
   },
   textInput: {
@@ -37,6 +36,11 @@ const styles = StyleSheet.create({
   },
   refreshBtn: {
     color: 'green',
+    right: 0,
+    textAlign: 'right',
+  },
+  removeBtn:{
+    color: 'red',
     right: 0,
     textAlign: 'right',
   },
