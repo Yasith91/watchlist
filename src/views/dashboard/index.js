@@ -28,14 +28,9 @@ let apiCall = {
 
 export default function MyApp() {
   const dispatch = useDispatch();
-  const { data: twelveData } = useSelector(state => state.twelveData);
+  const { data } = useSelector(state => state.twelveData);
   const [symbol, setSymbol] = useState('');
   const [refreshSocket, setRefreshSocket] = useState(false);
-  const [data, setData] = useState({});
-
-  useEffect(() => {
-    setData(twelveData);
-  }, [twelveData]);
 
   useEffect(() => {
     const addedSymbols = Object.keys(data).toString();
@@ -94,22 +89,21 @@ export default function MyApp() {
   };
 
   const sortByName = () => {
-    sort('symbol');
+    const sortObject = Object.keys(data)
+      .sort()
+      .reduce((r, k) => ((r[k] = data[k]), r), {});
+    dispatch(setDataList(sortObject));
   };
 
   const sortByPrice = () => {
-    sort('price');
-  };
-
-  const sort = key => {
     const sortable = Object.entries({ ...data })
       .sort(([, a], [, b]) => {
-        return a[0][key] - b[0][key];
+        return a[0].price - b[0].price;
       })
       .reduce((r, [k, v]) => {
         return { ...r, [k]: v };
       }, {});
-    setData(sortable);
+    dispatch(setDataList(sortable));
   };
 
   return (
